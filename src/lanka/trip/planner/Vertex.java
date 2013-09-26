@@ -16,15 +16,16 @@ package lanka.trip.planner;
 
     private String city_name;
     private int distance;//distance from source
-    private float travelTime;//time taken to travel from source to that city
+    private float travelTime;//time taken to travel from source to that city (only GO TO THAT CITY not return)
 
     private Vertex pi;//parent vertex of the route we calculated
     private int num;//used to find adjucney list of that node index
     private String colour;
     private String interest;// to match with user's interest
     private int rate;
+    private int vistingHours;// hrs required to visit the place
 
-    public Vertex(String city_name, int num,String interest,int rate) {
+    public Vertex(String city_name, int num,String interest,int rate,int visitingHours) {
         this.city_name = city_name;
         this.distance = 0;
         this.travelTime = 0;
@@ -33,6 +34,7 @@ package lanka.trip.planner;
         this.colour = "white";
         this.interest=interest;
         this.rate=rate;
+        this.vistingHours=visitingHours;
 
     }
 
@@ -41,6 +43,16 @@ package lanka.trip.planner;
     public Vertex(int distance) {
         this.distance=distance;
     }
+
+    public void setVistingHours(int vistingHours) {
+        this.vistingHours = vistingHours;
+    }
+
+    public int getVistingHours() {
+        return vistingHours;
+    }
+
+    
 
     public void setRate(int rate) {
         this.rate = rate;

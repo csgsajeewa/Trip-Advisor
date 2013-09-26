@@ -16,53 +16,54 @@ package lanka.trip.planner;
 {
  
 
-  int max_profit_bu(int i,int capacity,int price[],float weight[],int number_of_goods)
+  int getBestPlan(int i,int duration,int rates[],float durations[],int numOfCities)
     {
-         int profit[][]=new int[number_of_goods+1][capacity+1];
-         int keep[][]=new int[number_of_goods+1][capacity+1];
-         int max_profit=0,j,k;
+         int maxRates[][]=new int[numOfCities+1][duration+1];
+         int keep[][]=new int[numOfCities+1][duration+1];
+         int maximumRate=0,j,k;
 
-         for( j=0;j<=number_of_goods;j++)
+         for( j=0;j<=numOfCities;j++)
          {
-             for( k=0;k<=capacity;k++)
+             for( k=0;k<=duration;k++)
              {
-                 profit[j][k]=-1;
+                maxRates[j][k]=-1;
                  keep[j][k]=0;
              }
          }
 
 
-         for(k=0;k<=capacity;k++)
+         for(k=0;k<=duration;k++)
              {
-                if(k<weight[number_of_goods])
+                if(k<durations[numOfCities])
                 {
-                    profit[number_of_goods][k]=0;
+                   maxRates[numOfCities][k]=0;
                 }
                 else{
-                    profit[number_of_goods][k]=price[number_of_goods];
-                    keep[number_of_goods][k]=1;
+                    maxRates[numOfCities][k]=rates[numOfCities];
+                    keep[numOfCities][k]=1;
                  }
              }
 
-       for( j=number_of_goods-1;j>=i;j--)
+       for( j=numOfCities-1;j>=i;j--)
          {
-             for( k=0;k<=capacity;k++)
+             for( k=0;k<=duration;k++)
              {
-                 if(weight[j]<=k )
+                 if(durations[j]<=k )
                 {
 
-                    int num=k-Math.round(weight[j]);
-                     max_profit= profit[j][k]=Math.max(profit[j+1][k],price[j]+profit[j+1][num]);
-                     if(profit[j+1][k]<price[j]+profit[j+1][num] ){
+                    int num=k-Math.round(durations[j]);
+                     maximumRate= maxRates[j][k]=Math.max(maxRates[j+1][k],rates[j]+maxRates[j+1][num]);
+                     if(maxRates[j+1][k]<rates[j]+maxRates[j+1][num] ){
+                         keep[j][k]=1;
                      }
                      else
                          keep[j][k]=0;
 
                 }
-                if( weight[j]>k )
+                if( durations[j]>k )
                 {
 
-                    max_profit=profit[j][k]=profit[j+1][k];
+                   maximumRate=maxRates[j][k]=maxRates[j+1][k];
                       keep[j][k]=0;
 
                 }
@@ -71,20 +72,20 @@ package lanka.trip.planner;
          }
 
 
-         for( j=1;j<=number_of_goods;j++)
+         for( j=1;j<=numOfCities;j++)
          {
-             for( k=0;k<=capacity;k++)
+             for( k=0;k<=duration;k++)
              {
-               System.out.format("%s\t",profit[j][k]);
+               System.out.format("%s\t",maxRates[j][k]);
              }
               System.out.format("\n");
 
 
          }
          System.out.println("/////////////////////////////////////////////////////");
-          for( j=1;j<=number_of_goods;j++)
+          for( j=1;j<=numOfCities;j++)
          {
-             for( k=0;k<=capacity;k++)
+             for( k=0;k<=duration;k++)
              {
                System.out.format("%s\t",keep[j][k]);
              }
@@ -92,15 +93,15 @@ package lanka.trip.planner;
 
 
          }
-           int z=capacity;
-          for( j=1;j<=number_of_goods;j++)
+           int z=duration;
+          for( j=1;j<=numOfCities;j++)
          {
 
             if(keep[j][z]==1){
                 System.out.println(j);
-                z=z-Math.round(weight[j]);
+                z=z-Math.round(durations[j]);
             }
          }
-       return max_profit;
+       return maximumRate;
     }
 }

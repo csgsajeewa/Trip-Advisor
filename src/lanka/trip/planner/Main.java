@@ -22,20 +22,27 @@ public class Main {
     {
          LinkedList <Road>adjucenyList[]=new LinkedList[9];
          int numOfVertices=9;
+         /////user inputs//////////////////////
+          String userLocation="Matara";
+          String userInterest="History";
+          int numOfDays=2;
+          int duration=numOfDays*12;// in hours, assume for a day only 12 hrs are available
+
+         ////////////////////////////////////
          Vertex verticesA[]=new Vertex[numOfVertices];
         for (int i = 0; i < adjucenyList.length; i++) {
             adjucenyList[i]=new LinkedList<Road>();
 
         }
-         verticesA[0]=new Vertex("Thissa",0,"History",2);
-          verticesA[1]=new Vertex("Tangalle",1,"Wild Life",1);
-          verticesA[2]=new Vertex("Matara",2,"Beach",2);
-          verticesA[3]=new Vertex("Galle",3,"History",1);
-          verticesA[4]=new Vertex("Kandy",4,"History",5);
-          verticesA[5]=new Vertex("Colombo",5,"Shopping",1);
-          verticesA[6]=new Vertex("Matale",6,"Hill Country",3);
-          verticesA[7]=new Vertex("Anuradhapura",7,"History",8);
-          verticesA[8]=new Vertex("Deniyaya",8,"Hill Country",4);
+         verticesA[0]=new Vertex("Thissa",0,"History",12,4);
+          verticesA[1]=new Vertex("Tangalle",1,"Wild Life",1,2);
+          verticesA[2]=new Vertex("Matara",2,"Beach",2,3);
+          verticesA[3]=new Vertex("Galle",3,"History",10,5);
+          verticesA[4]=new Vertex("Kandy",4,"History",5,6);
+          verticesA[5]=new Vertex("Colombo",5,"Shopping",1,5);
+          verticesA[6]=new Vertex("Matale",6,"Hill Country",3,3);
+          verticesA[7]=new Vertex("Anuradhapura",7,"History",8,8);
+          verticesA[8]=new Vertex("Deniyaya",8,"Hill Country",4,2);
 
          Road road1=new Road( verticesA[1],50,'B');
          adjucenyList[0].add(road1);
@@ -61,13 +68,13 @@ public class Main {
          adjucenyList[2].add(road11);
 
       SearchEngine uniform_cost_search=new SearchEngine();
-      uniform_cost_search.UCS(adjucenyList,  verticesA[2]);// find path from source to all destinations within given duration
+      uniform_cost_search.UCS(adjucenyList,  verticesA[2],duration);// find path from source to all destinations within given duration
       //////////////////////planing/////////////////////////////////
+      // we assume there are 16 working hours per day
       int counter=0;
-      String userLocation="Matara";
-      String userInterest="History";
+     
       for (int i = 0; i < verticesA.length; i++) {
-           if(!verticesA[i].getCity_name().equals(userLocation) && verticesA[i].getInterest().equals(userInterest)){
+           if(!verticesA[i].getCity_name().equals(userLocation) && verticesA[i].getInterest().equals(userInterest)&& (verticesA[i].getTravelTime()*2+verticesA[i].getVistingHours()<duration)){
                if(verticesA[i].getTravelTime()!=0){
                    counter++;
                }
@@ -78,7 +85,7 @@ public class Main {
      Vertex selectedCities[]=new Vertex[counter];
       int j=0;
       for (int i = 0; i < verticesA.length; i++) {
-           if(!verticesA[i].getCity_name().equals(userLocation) && verticesA[i].getInterest().equals(userInterest)){
+           if(!verticesA[i].getCity_name().equals(userLocation) && verticesA[i].getInterest().equals(userInterest) && (verticesA[i].getTravelTime()*2+verticesA[i].getVistingHours()<duration)){
                if(verticesA[i].getTravelTime()!=0){
                   selectedCities[j]=verticesA[i];
                   j++;
@@ -92,36 +99,27 @@ public class Main {
      durations[0]=0;
       for (int i = 1; i <= selectedCities.length; i++) {
               rates[i]=selectedCities[i-1].getRate();
-              durations[i]=selectedCities[i-1].getTravelTime();
+              durations[i]=(selectedCities[i-1].getTravelTime())*2+selectedCities[i-1].getVistingHours();
 
         }
 
      PlaningEngine planingEngine=new PlaningEngine();
-     planingEngine.max_profit_bu(1,4, rates, durations, selectedCities.length);
+     planingEngine.getBestPlan(1,duration, rates, durations, selectedCities.length);
 
 
-
-
-     
-
-
-
-
-
-
-      /////////////////////////////////////////////////
-      System.out.println(verticesA[7].getDistance());
+      ////////////////////end /////////////////////////////
+    
       System.out.println("-------------------------Path--------------------------------");
-      uniform_cost_search.print_path(verticesA[2],verticesA[0]);
+      uniform_cost_search.print_path(verticesA[2],verticesA[0],duration);
        System.out.println();
       System.out.println("-------------------------Path--------------------------------");
-      uniform_cost_search.print_path(verticesA[2],verticesA[3]);
+      uniform_cost_search.print_path(verticesA[2],verticesA[3],duration);
        System.out.println();
       System.out.println("-------------------------Path--------------------------------");
-      uniform_cost_search.print_path(verticesA[2],verticesA[4]);
+      uniform_cost_search.print_path(verticesA[2],verticesA[4],duration);
        System.out.println();
       System.out.println("-------------------------Path--------------------------------");
-      uniform_cost_search.print_path(verticesA[2],verticesA[7]);
+      uniform_cost_search.print_path(verticesA[2],verticesA[7],duration);
        System.out.println();
 
 
