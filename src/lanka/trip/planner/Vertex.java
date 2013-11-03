@@ -22,7 +22,7 @@ package lanka.trip.planner;
     private int num;//used to find adjucney list of that node index
     private String colour;
     private String interest;// to match with user's interest
-    private int rate;
+    private int rate;//for optimization problem
     private int vistingHours;// hrs required to visit the place
 
     public Vertex(String city_name, int num,String interest,int rate,int visitingHours) {
